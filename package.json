@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "bootstrap": "^5.3.3",
+    "next": "14.2.11",
     "react": "^18",
+    "react-bootstrap": "^2.10.5",
     "react-dom": "^18",
-    "next": "14.2.11"
+    "react-hook-form": "^7.53.2",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "eslint": "^8",
