@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { useAtom } from "jotai";
+import { searchHistoryAtom } from "../store"; // Import the search history atom
 
 export default function AdvancedSearch() {
   const {
@@ -9,25 +11,28 @@ export default function AdvancedSearch() {
     formState: { errors },
   } = useForm();
   const router = useRouter();
+  const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom); // Access and update search history atom
 
   // Function to handle form submission
   const submitForm = (data) => {
-    let queryString = "searchBy=true";
+    // Ensure searchBy is set correctly before appending it
+    let queryString = `${data.searchBy}=true`; // Append 'searchBy' dynamically
+    // Conditionally add other query parameters based on user input
     if (data.geoLocation) {
       queryString += `&geoLocation=${data.geoLocation}`;
     }
     if (data.medium) {
       queryString += `&medium=${data.medium}`;
     }
-    if (data.isOnView) {
-      queryString += `&isOnView=${data.isOnView}`;
-    }
-    if (data.isHighlight) {
-      queryString += `&isHighlight=${data.isHighlight}`;
-    }
+    queryString += `&isOnView=${data.isOnView}`;
+    queryString += `&isHighlight=${data.isHighlight}`;
     if (data.q) {
       queryString += `&q=${data.q}`;
     }
+    // Add the new search query to the history atom
+    setSearchHistory((current) => [...current, queryString]);
+
+    // Navigate to the artwork search page with the constructed query string
     router.push(`/artwork?${queryString}`);
   };
 

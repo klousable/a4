@@ -1,17 +1,41 @@
 import useSWR from "swr";
 import Error from "next/error";
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
+import { useAtom } from "jotai";
+import { useState } from "react";
+import { favouritesAtom } from "@/store";
 
 export default function ArtworkCardDetail({ objectID }) {
   const { data, error } = useSWR(
-    `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`
+    objectID
+      ? `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`
+      : null
   );
 
-  // error state or no data
+  // get favourites list from store.js
+  const [favouritesList, setFavouritesList] = useAtom(favouritesAtom);
+
+  // track if the artwork is in the favourites list
+  const [showAdded, setShowAdded] = useState(favouritesList.includes(objectID));
+
+  // Function to handle favourites button click
+  const favouritesClicked = () => {
+    if (showAdded) {
+      // remove from favourites
+      setFavouritesList((current) => current.filter((fav) => fav !== objectID));
+      setShowAdded(false);
+    } else {
+      // add to favourites
+      setFavouritesList((current) => [...current, objectID]);
+      setShowAdded(true);
+    }
+  };
+
+  // handle error or no data
   if (error) return <Error statusCode={404} />;
   if (!data) return null;
 
-  // default values
+  // Default values for artwork data
   const {
     primaryImage,
     title = "N/A",
@@ -55,6 +79,12 @@ export default function ArtworkCardDetail({ objectID }) {
           <br />
           <strong>Dimensions:</strong> {dimensions}
         </Card.Text>
+        <Button
+          variant={showAdded ? "primary" : "outline-primary"}
+          onClick={favouritesClicked}
+        >
+          {showAdded ? "+ Favourite (added)" : "+ Favourite"}
+        </Button>
       </Card.Body>
     </Card>
   );

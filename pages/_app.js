@@ -1,6 +1,7 @@
 import "../styles/bootstrap.min.css";
 import Layout from "@/components/Layout";
 import { SWRConfig } from "swr";
+import "../styles/history.css";
 
 export default function App({ Component, pageProps }) {
   return (
