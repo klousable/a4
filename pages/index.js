@@ -1,11 +1,13 @@
 /*********************************************************************************
- *  WEB422 – Assignment 4
- *  I declare that this assignment is my own work in accordance with Seneca Academic Policy.
- *  No part of this assignment has been copied manually or electronically from any other source
- *  (including web sites) or distributed to other students.
+ *  WEB422 – Assignment 06
+ *  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part of this
+ *  assignment has been copied manually or electronically from any other source (including web sites) or
+ *  distributed to other students.
  *
- *  Name: Carrie Leung Student ID: 106844228 Date: November 10, 2024
- *  https://a4-git-master-klousables-projects.vercel.app/
+ *  Name: Carrie Leung Student ID: 106844228 Date: November 27, 2024
+ *
+ *  Vercel App (Deployed) Link: _____________________________________________________
+ *
  ********************************************************************************/
 
 import { Image, Row, Col } from "react-bootstrap";
