@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { searchHistoryAtom } from "@/store";
 import { ListGroup, Button } from "react-bootstrap";
 import { useRouter } from "next/router";
-import { removeHistory } from "@/lib/userData"; // Import removeHistory function
+import { removeFromHistory } from "@/lib/userData"; // Import removeHistory function
 
 export default function History() {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function History() {
     e.stopPropagation();
 
     try {
-      await removeHistory(searchHistory[index]);
+      await removeFromHistory(searchHistory[index]); // Correct function name
       setSearchHistory((current) => {
         let newHistory = [...current];
         newHistory.splice(index, 1);
