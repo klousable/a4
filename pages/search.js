@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useAtom } from "jotai";
 import { searchHistoryAtom } from "../store"; // Import the search history atom
+import { addToHistory } from "../lib/userData"; // Import addToHistory function
 
 export default function AdvancedSearch() {
   const {
@@ -13,11 +14,8 @@ export default function AdvancedSearch() {
   const router = useRouter();
   const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom); // Access and update search history atom
 
-  // Function to handle form submission
-  const submitForm = (data) => {
-    // Ensure searchBy is set correctly before appending it
+  const submitForm = async (data) => {
     let queryString = `${data.searchBy}=true`; // Append 'searchBy' dynamically
-    // Conditionally add other query parameters based on user input
     if (data.geoLocation) {
       queryString += `&geoLocation=${data.geoLocation}`;
     }
@@ -29,11 +27,14 @@ export default function AdvancedSearch() {
     if (data.q) {
       queryString += `&q=${data.q}`;
     }
-    // Add the new search query to the history atom
-    setSearchHistory((current) => [...current, queryString]);
 
-    // Navigate to the artwork search page with the constructed query string
-    router.push(`/artwork?${queryString}`);
+    try {
+      const updatedHistory = await addToHistory(queryString);
+      setSearchHistory(updatedHistory);
+      router.push(`/artwork?${queryString}`);
+    } catch (error) {
+      console.error("Error adding to history:", error);
+    }
   };
 
   return (

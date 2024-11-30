@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 export default function Register() {
   const [warning, setWarning] = useState("");
+  const [success, setSuccess] = useState(false);
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -15,9 +16,15 @@ export default function Register() {
 
     try {
       await registerUser(user, password, password2);
-      router.push("/login");
+      setSuccess(true);
+      setWarning("");
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
     } catch (err) {
       setWarning(err.message);
+      setSuccess(false);
     }
   }
 
@@ -57,7 +64,7 @@ export default function Register() {
         </Form.Group>
         <br />
         <Form.Group>
-          <Form.Label>Confirm Password:</Form.Label>{" "}
+          <Form.Label>Confirm Password:</Form.Label>
           <Form.Control
             type="password"
             value={password2}
@@ -71,6 +78,15 @@ export default function Register() {
           <>
             <br />
             <Alert variant="danger">{warning}</Alert>
+          </>
+        )}
+
+        {success && (
+          <>
+            <br />
+            <Alert variant="success">
+              Account registered successfully! Redirecting to login...
+            </Alert>
           </>
         )}
 

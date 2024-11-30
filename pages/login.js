@@ -11,12 +11,27 @@ export default function Login(props) {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const [favouritesList, setFavouritesList] = useAtom(favouritesAtom);
-  const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom);
+
+  // Use atoms to update favourites and search history
+  const [_, setFavourites] = useAtom(favouritesAtom);
+  const [__, setSearchHistory] = useAtom(searchHistoryAtom);
 
   async function updateAtoms() {
-    setFavouritesList(await getFavourites());
-    setSearchHistory(await getHistory());
+    console.log("updateAtoms is being called in Login"); // Log when the function is triggered
+    try {
+      const [favourites, searchHistory] = await Promise.all([
+        getFavourites(),
+        getHistory(),
+      ]);
+
+      // Log the actual arrays
+      console.log("Favourites:", favourites.favourites); 
+      console.log("Search History:", searchHistory.history); 
+      setFavourites(favourites.favourites); 
+      setSearchHistory(searchHistory.history); 
+    } catch (err) {
+      console.error("Error updating atoms:", err);
+    }
   }
 
   async function handleSubmit(e) {
@@ -33,15 +48,14 @@ export default function Login(props) {
 
   return (
     <>
-      <Card bg="light">
+      <br />
+      <Card bg="dark">
         <Card.Body>
           <h2>Login</h2>
-          <p>Enter your login information below:</p>
+          Enter your login information below:
         </Card.Body>
       </Card>
-
       <br />
-
       <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Label>User:</Form.Label>

@@ -4,8 +4,9 @@ import { Row, Col, Container } from "react-bootstrap";
 import ArtworkCard from "../components/ArtworkCard";
 
 export default function Favourites() {
-  // Access the favourites list from Jotai
   const [favouritesList] = useAtom(favouritesAtom);
+
+  if (!favouritesList) return null;
 
   return (
     <Container>

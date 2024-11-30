@@ -2,6 +2,7 @@ import "../styles/bootstrap.min.css";
 import Layout from "@/components/Layout";
 import { SWRConfig } from "swr";
 import "../styles/history.css";
+import RouteGuard from "@/components/RouteGuard";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -9,13 +10,10 @@ export default function App({ Component, pageProps }) {
       value={{
         fetcher: async (url) => {
           const res = await fetch(url);
-          // If the status code is not in the range 200-299,
-          // we still try to parse and throw it.
           if (!res.ok) {
             const error = new Error(
               "An error occurred while fetching the data."
             );
-            // Attach extra info to the error object.
             error.info = await res.json();
             error.status = res.status;
             throw error;
@@ -25,7 +23,9 @@ export default function App({ Component, pageProps }) {
       }}
     >
       <Layout>
-        <Component {...pageProps} />
+        <RouteGuard>
+          <Component {...pageProps} />
+        </RouteGuard>
       </Layout>
     </SWRConfig>
   );

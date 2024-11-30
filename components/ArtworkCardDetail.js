@@ -2,8 +2,9 @@ import useSWR from "swr";
 import Error from "next/error";
 import { Card, Button } from "react-bootstrap";
 import { useAtom } from "jotai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { favouritesAtom } from "@/store";
+import { addToFavourites, removeFromFavourites } from "@/lib/userData";
 
 export default function ArtworkCardDetail({ objectID }) {
   const { data, error } = useSWR(
@@ -12,26 +13,30 @@ export default function ArtworkCardDetail({ objectID }) {
       : null
   );
 
-  // get favourites list from store.js
   const [favouritesList, setFavouritesList] = useAtom(favouritesAtom);
+  const [showAdded, setShowAdded] = useState(false);
 
-  // track if the artwork is in the favourites list
-  const [showAdded, setShowAdded] = useState(favouritesList.includes(objectID));
+  // Update showAdded when favouritesList changes
+  useEffect(() => {
+    setShowAdded(favouritesList?.includes(objectID));
+  }, [favouritesList, objectID]);
 
-  // Function to handle favourites button click
-  const favouritesClicked = () => {
-    if (showAdded) {
-      // remove from favourites
-      setFavouritesList((current) => current.filter((fav) => fav !== objectID));
-      setShowAdded(false);
-    } else {
-      // add to favourites
-      setFavouritesList((current) => [...current, objectID]);
-      setShowAdded(true);
+  // Handle favourites button click
+  const favouritesClicked = async () => {
+    try {
+      if (showAdded) {
+        // Remove from favourites
+        setFavouritesList(await removeFromFavourites(objectID));
+      } else {
+        // Add to favourites
+        setFavouritesList(await addToFavourites(objectID));
+      }
+    } catch (error) {
+      console.error("Error updating favourites:", error);
     }
   };
 
-  // handle error or no data
+  // Handle error or no data
   if (error) return <Error statusCode={404} />;
   if (!data) return null;
 
