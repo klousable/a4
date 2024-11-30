@@ -6,8 +6,10 @@
  *
  *  Name: Carrie Leung Student ID: 106844228 Date: November 27, 2024
  *
- *  Vercel App (Deployed) Link: _____________________________________________________
- *
+ *  Vercel App (Deployed) Link: https://a4-kappa.vercel.app/
+ * Named A4 but has A6 functionality
+ * Render App for API https://user-api-91ww.onrender.com
+ * SLOW login and register
  ********************************************************************************/
 
 import { Image, Row, Col } from "react-bootstrap";
