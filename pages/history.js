@@ -24,7 +24,7 @@ export default function History() {
     e.stopPropagation();
 
     try {
-      await removeFromHistory(searchHistory[index]); // Correct function name
+      await removeFromHistory(searchHistory[index]);
       setSearchHistory((current) => {
         let newHistory = [...current];
         newHistory.splice(index, 1);
